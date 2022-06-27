@@ -5,7 +5,7 @@ import { useHistory } from 'react-router-dom';
 const PirateForm = () => {
     const [pirateName,setPirateName]=useState("");
     const [image,setImage]=useState("");
-    const [treasures,setTreasures]=useState("");
+    const [treasures,setTreasures]=useState(0);
     const [phrase,setPhrase]=useState("");
     const [position,setposition]=useState("");
     const [leg,setLeg]=useState(true);
@@ -13,7 +13,7 @@ const PirateForm = () => {
     const [hookhand,setHookhand] =useState(true);
     const [errors,setErrors]= useState([]);
     const history =useHistory()
-
+    
     const onSubmitHandler=(e)=>{
         e.preventDefault();
         axios.post('http://localhost:8000/api/pirate/new',{
@@ -29,7 +29,6 @@ const PirateForm = () => {
         .then(()=>history.push("/pirates"))
         .catch(err=>{
             const errorResponse = err.response.data.errors; // Get the errors from err.response.data
-            console.log(errorResponse)
             const errorArr = []; // Define a temp error array to push the messages in
             for (const key of Object.keys(errorResponse)) { // Loop through all errors and get the messages
                 errorArr.push(errorResponse[key].message)
@@ -40,12 +39,14 @@ const PirateForm = () => {
     }
   return (
     <div>
-        <Card body color="warning" inverse >
+        <Card body style={{
+              backgroundColor:'#7a5e08',padding:50,margin:100}} inverse >
           <div className='after'> <h1>Add Pirate</h1> <Button  color="primary" onClick={()=>history.push("/pirates")}>Crew Board</Button></div>
+          <hr/>
         <CardBody >
         
             <Form onSubmit={onSubmitHandler}>
-            {errors.map((err, index) => <p key={index}>{err}</p>)}
+             {errors.map((err, index) => <p key={index}>{err}</p>)} 
             <div id='def'>
                 <div>
                 <Label for="pirate">Pirate Name</Label>
@@ -55,7 +56,7 @@ const PirateForm = () => {
                 type="text"
                 value={pirateName}
                 onChange ={(e)=>setPirateName(e.target.value)}
-                /> <br/><br/>
+                /><span className="text-danger">{errors.name ? errors.name.message: "" }</span> <br/><br/>
                 <Label for="Image">Image URL</Label>
                 <Input
                 name="Image"
@@ -91,10 +92,11 @@ const PirateForm = () => {
                 id="exampleSelect"
 
                 type="select"
+               
                 onChange ={(e)=>setposition(e.target.value)}>
                 <option>
                 Captain
-      </option>
+        </option>
       <option>
         First Mate
       </option>

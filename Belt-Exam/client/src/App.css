@@ -38,9 +38,8 @@
 }
 .after{
   display: flex;
-  justify-content: space-evenly;
-  align-items: center;
-  justify-content: center;
+  justify-content: space-around;
+  
 }
 #def{
   display: flex;
